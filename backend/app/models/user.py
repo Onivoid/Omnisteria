@@ -3,6 +3,7 @@ import bcrypt
 from tortoise.models import Model
 from tortoise import fields
 from tortoise.signals import pre_save
+from .character import Character
 
 class User(Model):
   id = fields.CharField(pk=True, max_length=255)
