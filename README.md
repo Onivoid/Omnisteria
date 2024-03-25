@@ -1,4 +1,4 @@
-# PROJECT-NAME
+# Omnisteria
 
 ![React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=white)
 ![Scss](https://img.shields.io/badge/-Scss-CC6699?logo=sass&logoColor=white)
@@ -13,9 +13,10 @@
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?logo=docker&logoColor=white)
 ![Vercel](https://img.shields.io/badge/-Vercel-000000?logo=vercel&logoColor=white)
 
+## Qu'est-ce que Omnisteria ?
 
-## Qu'est-ce que [Project-Name] ?
+**Omnisteria** est un jeu de plateau de type JDR via navigateur.
 
-
+`TODO : Suite de la description`
 
 Pour plus d'informations sur la licence de ce projet veuillez lire son contenu [ici](/LICENSE.txt)
