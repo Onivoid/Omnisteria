@@ -1,4 +1,4 @@
-# Omnisteria
+# ![Omnisteria Icon](assets/logow64x64.png) Omnisteria
 
 ![React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=white)
 ![Scss](https://img.shields.io/badge/-Scss-CC6699?logo=sass&logoColor=white)
