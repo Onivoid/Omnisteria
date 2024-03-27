@@ -1,11 +1,11 @@
-import os
+from .config import TORTOISE_ORM
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
 from .routes import router
 from fastapi.middleware.cors import CORSMiddleware
 
-load_dotenv('../../.env')
+load_dotenv()
 
 app = FastAPI()
 
@@ -25,8 +25,7 @@ app.add_middleware(
 
 register_tortoise(
     app,
-    db_url=os.getenv('DATABASE_URL'),
-    modules={'models': ['app.models.user', 'app.models.character']},
+    config=TORTOISE_ORM,
     generate_schemas=True,
     add_exception_handlers=True,
 )

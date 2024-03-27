@@ -12,6 +12,7 @@ class User(Model):
   discord_id = fields.IntField(null=True)
   password = fields.CharField(max_length=255, null=True)
   isAdmin = fields.BooleanField(default=False)
+  token = fields.CharField(max_length=255, null=True)
 
 @pre_save(User)
 async def generate_uuid(sender, instance, using_db, update_fields):
