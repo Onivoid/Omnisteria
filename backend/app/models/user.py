@@ -21,4 +21,5 @@ async def generate_uuid(sender, instance, using_db, update_fields):
 
 @pre_save(User)
 async def hash_password(sender, instance, using_db, update_fields):
+  if not instance.password.startswith('$2b$'):
     instance.password = bcrypt.hashpw(instance.password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
