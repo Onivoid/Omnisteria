@@ -36,7 +36,7 @@ class Mutation:
         user_id = payload["sub"]
         try:
             character = await CharacterModel.create(
-                name=name, type=type, user_id=user_id
+                name=name, type=type, owner_id=user_id
             )
             return Character(
                 id=character.id,
