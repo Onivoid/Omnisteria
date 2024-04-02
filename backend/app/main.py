@@ -5,7 +5,9 @@ from tortoise.contrib.fastapi import register_tortoise
 from fastapi.middleware.cors import CORSMiddleware
 from strawberry.asgi import GraphQL
 import strawberry
-from .graphql.resolvers.user import Query as UserQuery, Mutation as UserMutation
+from .graphql.resolvers.user import (
+    Query as UserQuery, Mutation as UserMutation
+)
 from .graphql.resolvers.character import (
     Query as CharacterQuery,
     Mutation as CharacterMutation,
@@ -23,6 +25,7 @@ origins = [
 class Query(UserQuery, CharacterQuery):
     pass
 
+@strawberry.type
 class Mutation(UserMutation, CharacterMutation):
     pass
 
