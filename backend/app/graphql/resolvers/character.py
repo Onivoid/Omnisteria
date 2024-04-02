@@ -1,16 +1,15 @@
 import strawberry
 from app.models.character import Character as CharacterModel
+from app.models.user import User as UserModel
 from app.graphql.types.character import Character
 from tortoise.exceptions import DoesNotExist
 from dotenv import load_dotenv
 import os
 from jwt import (
-  encode as jwt_encode,
   decode as jwt_decode,
   DecodeError,
   ExpiredSignatureError
 )
-from datetime import datetime, timedelta
 
 load_dotenv()
 
@@ -60,12 +59,12 @@ class Query:
         payload = verify_token(token)
         if isinstance(payload, str):
             return payload
-
-        user_id = payload['sub']
         try:
-            characters = await CharacterModel.filter(owner_id=user_id)
-            return [
-                Character(
+            charactersData = await CharacterModel.all()
+            characters = []
+            for character in charactersData:
+                owner = await UserModel.get(id=character.owner_id)
+                characters.append(Character(
                     id=character.id,
                     name=character.name,
                     level=character.level,
@@ -77,9 +76,8 @@ class Query:
                     intelligence=character.intelligence,
                     wisdom=character.wisdom,
                     charisma=character.charisma,
-                    owner=character.owner_id
-                )
-                for character in characters
-            ]
+                    owner=owner.name
+                ))
+            return characters
         except DoesNotExist:
             return "User does not exist"
