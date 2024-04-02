@@ -7,8 +7,8 @@ from .character import Character
 
 class User(Model):
   id = fields.CharField(pk=True, max_length=255)
-  name = fields.CharField(max_length=255)
-  email = fields.CharField(max_length=255, null=True, unique=True)
+  name = fields.CharField(max_length=255, unique=True)
+  email = fields.CharField(max_length=255, unique=True)
   discord_id = fields.IntField(null=True)
   password = fields.CharField(max_length=255, null=True)
   isAdmin = fields.BooleanField(default=False)

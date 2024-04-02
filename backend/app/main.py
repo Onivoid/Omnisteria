@@ -2,8 +2,14 @@ from .config import TORTOISE_ORM
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
-from .routes import router
 from fastapi.middleware.cors import CORSMiddleware
+from strawberry.asgi import GraphQL
+import strawberry
+from .graphql.resolvers.user import Query as UserQuery, Mutation as UserMutation
+from .graphql.resolvers.character import (
+    Query as CharacterQuery,
+    Mutation as CharacterMutation,
+)
 
 load_dotenv()
 
@@ -13,7 +19,16 @@ origins = [
     "http://localhost:3000",
 ]
 
-app.include_router(router, prefix="/api")
+@strawberry.type
+class Query(UserQuery, CharacterQuery):
+    pass
+
+class Mutation(UserMutation, CharacterMutation):
+    pass
+
+schema = strawberry.Schema(query=Query, mutation=Mutation)
+
+app.add_route("/graphql", GraphQL(schema=schema))
 
 app.add_middleware(
     CORSMiddleware,
