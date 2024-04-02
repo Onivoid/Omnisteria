@@ -1,7 +1,9 @@
+from typing import Union
 import strawberry
 import bcrypt
 from app.models.user import User as UserModel
 from app.graphql.types.user import AuthenticatedUser, PublicUser
+from app.graphql.types.error import Error
 from tortoise.exceptions import DoesNotExist
 from dotenv import load_dotenv
 import os
@@ -30,7 +32,7 @@ def verify_token(token: str):
 @strawberry.type
 class Mutation:
     @strawberry.field
-    async def login(self, info, name: str, password: str, remember: bool) -> AuthenticatedUser:
+    async def login(self, info, name: str, password: str, remember: bool) -> Union[AuthenticatedUser, Error]:
         try:
             user = await UserModel.get(name=name)
             if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
@@ -46,17 +48,17 @@ class Mutation:
                   name=user.name,
                   email=user.email,
                   discord_id=user.discord_id,
-                  token=token
+                  token=token,
+                  characters=user.characters
                 )
             else:
-                return "Invalid password"
+                return Error(messsage="Invalid password")
         except DoesNotExist:
-            return "User does not exist"
+            return Error(messsage="User does not exist")
 
     @strawberry.field
     async def register(self, info, name: str, password: str, email: str) -> PublicUser:
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        user = await UserModel.create(name=name, password=hashed_password, email=email)
+        user = await UserModel.create(name=name, password=password, email=email)
         return PublicUser(
             name=user.name,
         )
