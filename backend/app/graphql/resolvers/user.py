@@ -8,10 +8,10 @@ from tortoise.exceptions import DoesNotExist
 from dotenv import load_dotenv
 import os
 from jwt import (
-  encode as jwt_encode,
-  decode as jwt_decode,
-  DecodeError,
-  ExpiredSignatureError
+    encode as jwt_encode,
+    decode as jwt_decode,
+    DecodeError,
+    ExpiredSignatureError
 )
 from datetime import datetime, timedelta
 
@@ -52,9 +52,9 @@ class Mutation:
                     characters=user.characters
                 )
             else:
-                return Error(messsage="Invalid password")
+                return Error(message="Invalid password")
         except DoesNotExist:
-            return Error(messsage="User does not exist")
+            return Error(message="User does not exist")
 
     @strawberry.field
     async def register(self, info, name: str, password: str, email: str) -> PublicUser:
