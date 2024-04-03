@@ -29,15 +29,11 @@ def verify_token(token: str):
 @strawberry.type
 class Mutation:
     @strawberry.field
-    async def create_character_type(
-        self, info, token: str, name: str
-    ) -> CharacterType:
+    async def create_character_type(self, info, token: str, name: str) -> CharacterType:
         payload = verify_token(token)
         if isinstance(payload, str):
             return payload
-        character_type = await CharacterTypeModel.create(
-            name=name, type=type
-        )
+        character_type = await CharacterTypeModel.create(name=name, type=type)
         return CharacterType(
             id=character_type.id,
             name=character_type.name,
@@ -48,7 +44,7 @@ class Mutation:
             base_intelligence=character_type.base_intelligence,
             base_wisdom=character_type.base_wisdom,
             base_charisma=character_type.base_charisma,
-            characters=character_type.characters
+            characters=character_type.characters,
         )
 
 
@@ -60,7 +56,9 @@ class Query:
         if isinstance(payload, str):
             return payload
         try:
-            charactersTypesData = await CharacterTypeModel.all().prefetch_related("characters")
+            charactersTypesData = await CharacterTypeModel.all().prefetch_related(
+                "characters"
+            )
             charactersTypes = []
             for characterType in charactersTypesData:
                 characters = []
@@ -68,32 +66,32 @@ class Query:
                     owner = await UserModel.get(id=character.owner_id)
                     characters.append(
                         Character(
-                          id=character.id,
-                          name=character.name,
-                          level=character.level,
-                          type=characterType.name,
-                          experience=character.experience,
-                          strength=character.strength,
-                          dexterity=character.dexterity,
-                          constitution=character.constitution,
-                          intelligence=character.intelligence,
-                          wisdom=character.wisdom,
-                          charisma=character.charisma,
-                          owner=owner.name,
+                            id=character.id,
+                            name=character.name,
+                            level=character.level,
+                            type=characterType.name,
+                            experience=character.experience,
+                            strength=character.strength,
+                            dexterity=character.dexterity,
+                            constitution=character.constitution,
+                            intelligence=character.intelligence,
+                            wisdom=character.wisdom,
+                            charisma=character.charisma,
+                            owner=owner.name,
                         )
                     )
                 charactersTypes.append(
                     CharacterType(
-                      id=characterType.id,
-                      name=characterType.name,
-                      experience_rate=characterType.experience_rate,
-                      base_strength=characterType.base_strength,
-                      base_dexterity=characterType.base_dexterity,
-                      base_constitution=characterType.base_constitution,
-                      base_intelligence=characterType.base_intelligence,
-                      base_wisdom=characterType.base_wisdom,
-                      base_charisma=characterType.base_charisma,
-                      characters=characters
+                        id=characterType.id,
+                        name=characterType.name,
+                        experience_rate=characterType.experience_rate,
+                        base_strength=characterType.base_strength,
+                        base_dexterity=characterType.base_dexterity,
+                        base_constitution=characterType.base_constitution,
+                        base_intelligence=characterType.base_intelligence,
+                        base_wisdom=characterType.base_wisdom,
+                        base_charisma=characterType.base_charisma,
+                        characters=characters,
                     )
                 )
             return charactersTypes

@@ -11,7 +11,7 @@ from jwt import (
     encode as jwt_encode,
     decode as jwt_decode,
     DecodeError,
-    ExpiredSignatureError
+    ExpiredSignatureError,
 )
 from datetime import datetime, timedelta
 
@@ -19,6 +19,7 @@ load_dotenv()
 
 SECRET_KEY = os.getenv("JWT_SECRET")
 ALGORITHM = os.getenv("JWT_ALGORITHM")
+
 
 def verify_token(token: str):
     try:
@@ -29,13 +30,16 @@ def verify_token(token: str):
     except DecodeError:
         return "Invalid token"
 
+
 @strawberry.type
 class Mutation:
     @strawberry.field
-    async def login(self, info, name: str, password: str, remember: bool) -> Union[AuthenticatedUser, Error]:
+    async def login(
+        self, info, name: str, password: str, remember: bool
+    ) -> Union[AuthenticatedUser, Error]:
         try:
             user = await UserModel.get(name=name)
-            if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+            if bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
                 payload = {
                     "exp": datetime.now() + timedelta(days=7 if not remember else 30),
                     "iat": datetime.now(),
@@ -49,7 +53,7 @@ class Mutation:
                     email=user.email,
                     discord_id=user.discord_id,
                     token=token,
-                    characters=user.characters
+                    characters=user.characters,
                 )
             else:
                 return Error(message="Invalid password")
@@ -63,6 +67,7 @@ class Mutation:
             name=user.name,
         )
 
+
 @strawberry.type
 class Query:
     @strawberry.field
@@ -71,15 +76,15 @@ class Query:
         if isinstance(payload, str):
             return payload
 
-        user_id = payload['sub']
+        user_id = payload["sub"]
         try:
-            user = await UserModel.get(id=user_id).prefetch_related('characters')
+            user = await UserModel.get(id=user_id).prefetch_related("characters")
             return AuthenticatedUser(
                 name=user.name,
                 email=user.email,
                 discord_id=user.discord_id,
                 token=user.token,
-                characters=user.characters
+                characters=user.characters,
             )
         except DoesNotExist:
             return "User does not exist"
