@@ -45,11 +45,11 @@ class Mutation:
                 user.token = token
                 await user.save()
                 return AuthenticatedUser(
-                  name=user.name,
-                  email=user.email,
-                  discord_id=user.discord_id,
-                  token=token,
-                  characters=user.characters
+                    name=user.name,
+                    email=user.email,
+                    discord_id=user.discord_id,
+                    token=token,
+                    characters=user.characters
                 )
             else:
                 return Error(messsage="Invalid password")
