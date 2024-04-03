@@ -8,7 +8,7 @@ class Character(Model):
   name = fields.CharField(max_length=255)
   level = fields.IntField(default=1)
   experience = fields.IntField(default=0)
-  type = fields.CharField(max_length=255)
+  type = fields.ForeignKeyField('models.CharacterType', related_name='characters')
   strength = fields.IntField(default=1)
   dexterity = fields.IntField(default=1)
   constitution = fields.IntField(default=1)

@@ -1,5 +1,6 @@
+from typing import Optional
 import strawberry
     
 @strawberry.type
 class Error:
-    messsage: str
+    message: str
