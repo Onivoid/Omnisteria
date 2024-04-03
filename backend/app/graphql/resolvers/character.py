@@ -42,7 +42,15 @@ class Mutation:
             return Error(message="Character type does not exist")
         try:
             character = await CharacterModel.create(
-                name=name, type_id=character_type.id, owner_id=user_id
+                name=name, 
+                type_id=character_type.id, 
+                owner_id=user_id,
+                strength=character_type.base_strength,
+                dexterity=character_type.base_dexterity,
+                constitution=character_type.base_constitution,
+                intelligence=character_type.base_intelligence,
+                wisdom=character_type.base_wisdom,
+                charisma=character_type.base_charisma,
             )
             return Character(
                 id=character.id,

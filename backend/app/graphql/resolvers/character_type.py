@@ -1,4 +1,5 @@
-from typing import List, Union
+from decimal import Decimal
+from typing import List, Optional, Union
 import strawberry
 from app.models.character_type import CharacterType as CharacterTypeModel
 from app.models.user import User as UserModel
@@ -29,11 +30,30 @@ def verify_token(token: str):
 @strawberry.type
 class Mutation:
     @strawberry.field
-    async def create_character_type(self, info, token: str, name: str) -> CharacterType:
+    async def create_character_type(
+        self, info, 
+        token: str, name: str, 
+        experience_rate: Optional[Decimal] = None, 
+        base_strength: Optional[int] = None,
+        base_dexterity: Optional[int] = None, 
+        base_constitution: Optional[int] = None, 
+        base_intelligence: Optional[int] = None,
+        base_wisdom: Optional[int] = None, 
+        base_charisma: Optional[int] = None
+    ) -> CharacterType:
         payload = verify_token(token)
         if isinstance(payload, str):
             return payload
-        character_type = await CharacterTypeModel.create(name=name, type=type)
+        character_type = await CharacterTypeModel.create(
+            name=name, type=type,
+            experience_rate=experience_rate if experience_rate else "1.0",
+            base_strength=base_strength if base_strength else 1,
+            base_dexterity=base_dexterity if base_dexterity else 1,
+            base_constitution=base_constitution if base_constitution else 1,
+            base_intelligence=base_intelligence if base_intelligence else 1,
+            base_wisdom=base_wisdom if base_wisdom else 1,
+            base_charisma=base_charisma if base_charisma else 1,
+        )
         return CharacterType(
             id=character_type.id,
             name=character_type.name,

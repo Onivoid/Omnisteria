@@ -1,3 +1,4 @@
+from decimal import Decimal
 import strawberry
 from typing import Optional
 from .character import Character
@@ -7,7 +8,7 @@ from .character import Character
 class CharacterType:
     id: Optional[str]
     name: str
-    experience_rate: Optional[int]
+    experience_rate: Optional[Decimal]
     base_strength: Optional[int]
     base_dexterity: Optional[int]
     base_constitution: Optional[int]
