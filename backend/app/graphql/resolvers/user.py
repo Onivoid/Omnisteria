@@ -109,7 +109,6 @@ class Query:
             return Error(message="You are not an admin")
 
         data = await UserModel.all().prefetch_related("characters")
-        print(data[1].characters[0].type)
         users = []
         for user in data:
             users.append(
