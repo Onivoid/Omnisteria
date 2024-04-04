@@ -53,6 +53,7 @@ class Mutation:
                     email=user.email,
                     discord_id=user.discord_id,
                     token=token,
+                    isAdmin=user.isAdmin,
                     characters=user.characters,
                 )
             else:
@@ -84,6 +85,7 @@ class Query:
                 email=user.email,
                 discord_id=user.discord_id,
                 token=user.token,
+                isAdmin=user.isAdmin,
                 characters=user.characters,
             )
         except DoesNotExist:

@@ -14,4 +14,5 @@ class AuthenticatedUser:
     email: Optional[str]
     discord_id: Optional[int]
     token: Optional[str]
+    isAdmin: Optional[bool]
     characters: Optional[list[Character]]
