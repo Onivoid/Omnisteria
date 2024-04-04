@@ -1,8 +1,8 @@
-from typing import Union
+from typing import List, Union
 import strawberry
 import bcrypt
 from app.models.user import User as UserModel
-from app.graphql.types.user import AuthenticatedUser, PublicUser
+from app.graphql.types.user import AuthenticatedUser, PublicUser, User
 from app.graphql.types.error import Error
 from tortoise.exceptions import DoesNotExist
 from dotenv import load_dotenv
@@ -90,3 +90,17 @@ class Query:
             )
         except DoesNotExist:
             return "User does not exist"
+    @strawberry.field
+    async def users(self, info, token: str) -> list[User]:
+        payload = verify_token(token)
+        if isinstance(payload, str):
+            return payload
+        
+        user_id = payload["sub"]
+        adminUser = await UserModel.get(id=user_id)
+        
+        if not adminUser.isAdmin:
+            return Error(message="You are not an admin")
+        
+        users = await UserModel.all().prefetch_related("characters")
+        return users
