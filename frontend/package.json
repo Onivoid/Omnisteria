@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.9.10",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "next": "14.1.2",
@@ -17,7 +18,8 @@
     "primereact": "^10.5.3",
     "react": "^18",
     "react-dom": "^18",
-    "sass": "^1.71.1"
+    "sass": "^1.71.1",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "^20",
