@@ -10,10 +10,6 @@ from .graphql.resolvers.character import (
     Query as CharacterQuery,
     Mutation as CharacterMutation,
 )
-from .graphql.resolvers.character_type import (
-    Query as CharacterTypeQuery,
-    Mutation as CharacterTypeMutation,
-)
 
 load_dotenv()
 
@@ -25,12 +21,12 @@ origins = [
 
 
 @strawberry.type
-class Query(UserQuery, CharacterQuery, CharacterTypeQuery):
+class Query(UserQuery, CharacterQuery):
     pass
 
 
 @strawberry.type
-class Mutation(UserMutation, CharacterMutation, CharacterTypeMutation):
+class Mutation(UserMutation, CharacterMutation):
     pass
 
 

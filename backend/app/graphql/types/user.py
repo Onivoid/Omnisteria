@@ -1,6 +1,7 @@
 import strawberry
 from typing import Optional
-from .character import Character
+from .character import CharacterOutput
+
 
 @strawberry.type
 class User:
@@ -8,10 +9,13 @@ class User:
     name: str
     discord_id: Optional[int]
     isAdmin: Optional[bool]
-    characters: Optional[list[Character]]
+    characters: Optional[list[CharacterOutput]]
+
+
 @strawberry.type
 class PublicUser:
     name: str
+
 
 @strawberry.type
 class AuthenticatedUser:
@@ -20,4 +24,9 @@ class AuthenticatedUser:
     discord_id: Optional[int]
     token: Optional[str]
     isAdmin: Optional[bool]
-    characters: Optional[list[Character]]
+    characters: Optional[list[CharacterOutput]]
+
+
+@strawberry.type
+class UserList:
+    users: list[User]

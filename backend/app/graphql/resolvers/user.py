@@ -1,8 +1,9 @@
-from typing import List, Union
+from typing import Union
+from fastapi.requests import HTTPConnection
 import strawberry
 import bcrypt
 from app.models.user import User as UserModel
-from app.graphql.types.user import AuthenticatedUser, PublicUser, User
+from app.graphql.types.user import AuthenticatedUser, PublicUser, UserList, User
 from app.graphql.types.error import Error
 from tortoise.exceptions import DoesNotExist
 from dotenv import load_dotenv
@@ -72,10 +73,12 @@ class Mutation:
 @strawberry.type
 class Query:
     @strawberry.field
-    async def me(self, info, token: str) -> AuthenticatedUser:
+    async def me(self, info: strawberry.Private) -> Union[AuthenticatedUser, Error]:
+        request: HTTPConnection = info.context["request"]
+        token = request.headers.get("Authorization")
         payload = verify_token(token)
         if isinstance(payload, str):
-            return payload
+            return Error(message=payload)
 
         user_id = payload["sub"]
         try:
@@ -89,18 +92,33 @@ class Query:
                 characters=user.characters,
             )
         except DoesNotExist:
-            return "User does not exist"
+            return Error(message="User does not exist")
+
     @strawberry.field
-    async def users(self, info, token: str) -> list[User]:
+    async def users(self, info: strawberry.Private) -> Union[UserList, Error]:
+        request: HTTPConnection = info.context["request"]
+        token = request.headers.get("Authorization")
         payload = verify_token(token)
         if isinstance(payload, str):
-            return payload
-        
+            return Error(message=payload)
+
         user_id = payload["sub"]
         adminUser = await UserModel.get(id=user_id)
-        
+
         if not adminUser.isAdmin:
             return Error(message="You are not an admin")
-        
-        users = await UserModel.all().prefetch_related("characters")
-        return users
+
+        data = await UserModel.all().prefetch_related("characters")
+        print(data[1].characters[0].type)
+        users = []
+        for user in data:
+            users.append(
+                User(
+                    id=user.id,
+                    name=user.name,
+                    discord_id=user.discord_id,
+                    isAdmin=user.isAdmin,
+                    characters=user.characters,
+                )
+            )
+        return UserList(users=users)
