@@ -1,6 +1,6 @@
 migrate:
-	docker exec -it ${containerID} aerich migrate
+	docker exec -it ${CID} aerich migrate
 upgrade:
-	docker exec -it ${containerID} aerich upgrade
+	docker exec -it ${CID} aerich upgrade
 runall:
-	docker exec -it ${containerID} aerich migrate && docker exec -it ${containerID} aerich upgrade
+	docker exec -it ${CID} aerich migrate && docker exec -it ${CID} aerich upgrade
