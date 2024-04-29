@@ -121,3 +121,30 @@ class Query:
                 )
             )
         return UserList(users=users)
+    
+    @strawberry.field
+    async def user(self, info: strawberry.Private) -> Union[User, Error]:
+        request: HTTPConnection = info.context["request"]
+        token = request.headers.get("Authorization")
+        user_id = request.headers.get("user_id")
+        payload = verify_token(token)
+        if isinstance(payload, str):
+            return Error(message=payload)
+        
+        authUser_ID = payload["sub"]
+        adminUser = await UserModel.get(id=authUser_ID)
+        
+        if not adminUser.isAdmin:
+            return Error(message="You are not an admin")
+        
+        try:
+            user = await UserModel.get(id=user_id).prefetch_related("characters")
+            return User(
+                id=user.id,
+                name=user.name,
+                discord_id=user.discord_id,
+                isAdmin=user.isAdmin,
+                characters=user.characters,
+            )
+        except DoesNotExist:
+            return Error(message="User does not exist")
