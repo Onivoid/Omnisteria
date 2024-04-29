@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
-import styles from "@/styles/pages/Admin.module.scss";
+import styles from "@/styles/components/Login.module.scss";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 

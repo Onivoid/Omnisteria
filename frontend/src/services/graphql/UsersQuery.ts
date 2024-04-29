@@ -42,3 +42,22 @@ query MyQuery {
   }
 }
 `
+
+export const GET_USER_BY_ID = gql`
+query MyQuery {
+  user {
+    ... on User {
+      id
+      name
+      characters {
+        id
+        level
+        name
+        type {
+          name
+        }
+      }
+    }
+  }
+}
+`

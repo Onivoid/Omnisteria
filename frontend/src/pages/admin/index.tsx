@@ -4,6 +4,7 @@ import { useStore } from "@/services/global/store";
 import { useState } from "react";
 import { login } from "@/services/auth/login";
 import { Notifications } from "@/components/notifications";
+import Style from "@/styles/pages/Admin.module.scss";
 
 export default function Admin() {
   const user = useStore(state => state.user);
